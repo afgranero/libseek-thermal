@@ -66,7 +66,7 @@ public:
      *  product_id: usb product id
      *  timeout:    timeout usb requests
      */
-    SeekDevice(int vendor_id, int product_id, int timeout=500);
+    SeekDevice(int vendor_id, int product_id, int timeout=500, int timeout_retries_max=-1);
 
     ~SeekDevice();
 
@@ -115,6 +115,7 @@ private:
     int m_vendor_id;
     int m_product_id;
     int m_timeout;
+    int m_timeout_retries_max;
     bool m_is_opened;
 
     struct libusb_context* m_ctx;

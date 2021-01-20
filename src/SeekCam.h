@@ -61,7 +61,7 @@ public:
 
 protected:
 
-    SeekCam(int vendor_id, int product_id, uint16_t* buffer, size_t raw_height, size_t raw_width, size_t request_size, cv::Rect roi, std::string ffc_filename);
+    SeekCam(int vendor_id, int product_id, uint16_t* buffer, size_t raw_height, size_t raw_width, size_t request_size, cv::Rect roi, std::string ffc_filename,  int timeout=500, int timeout_retries_max=-1);
     ~SeekCam();
 
     virtual bool init_cam() = 0;

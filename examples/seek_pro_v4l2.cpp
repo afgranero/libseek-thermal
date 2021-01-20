@@ -14,7 +14,7 @@
 
 int main(int argc, char** argv)
 {
-    LibSeek::SeekThermalPro seek(argc == 2 ? argv[1] : "");
+    LibSeek::SeekThermalPro seek(argc == 2 ? argv[1] : "", 500, 10);
     cv::Mat frame, grey_frame;
 
     if (!seek.open()) {

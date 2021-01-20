@@ -11,10 +11,11 @@
 
 using namespace LibSeek;
 
-SeekDevice::SeekDevice(int vendor_id, int product_id, int timeout) :
+SeekDevice::SeekDevice(int vendor_id, int product_id, int timeout, int timeout_retries_max) :
     m_vendor_id(vendor_id),
     m_product_id(product_id),
     m_timeout(timeout),
+    m_timeout_retries_max(timeout_retries_max),
     m_is_opened(false),
     m_ctx(nullptr),
     m_handle(nullptr) { }
@@ -115,12 +116,19 @@ bool SeekDevice::fetch_frame(uint16_t* buffer, std::size_t size, std::size_t req
     uint8_t* buf = reinterpret_cast<uint8_t*>(buffer);
     int done = 0;
 
+    int timeout_count = 0;
     while (todo != 0) {
         debug("Asking for %d B of data at %d\n", request_size, done);
         res = libusb_bulk_transfer(m_handle, 0x81, &buf[done], request_size, &actual_length, m_timeout);
         if (res == LIBUSB_ERROR_TIMEOUT)
         {
-            error("Error: LIBUSB_ERROR_TIMEOUT\n");
+            timeout_count++;
+            error("Error fetching frame: LIBUSB_ERROR_TIMEOUT\n");
+            if (m_timeout_retries_max>0 && timeout_count==timeout_count) {
+                error("maximum timeout retries reached.\n");
+                return false;
+            }
+
         } else if (res != 0) {
             error("Error: bulk transfer failed: %s\n", libusb_error_name(res));
             return false;

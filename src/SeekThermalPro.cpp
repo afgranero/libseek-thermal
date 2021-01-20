@@ -13,10 +13,10 @@ SeekThermalPro::SeekThermalPro() :
     SeekThermalPro(std::string())
 { }
 
-SeekThermalPro::SeekThermalPro(std::string ffc_filename) :
+SeekThermalPro::SeekThermalPro(std::string ffc_filename, int timeout, int timeout_retries_max) :
     SeekCam(0x289d, 0x0011, m_buffer,
             THERMAL_PRO_RAW_HEIGHT, THERMAL_PRO_RAW_WIDTH, THERMAL_PRO_REQUEST_SIZE,
-            cv::Rect(1, 4, THERMAL_PRO_WIDTH, THERMAL_PRO_HEIGHT), ffc_filename)
+            cv::Rect(1, 4, THERMAL_PRO_WIDTH, THERMAL_PRO_HEIGHT), ffc_filename, timeout, timeout_retries_max)
 { }
 
 bool SeekThermalPro::init_cam()
